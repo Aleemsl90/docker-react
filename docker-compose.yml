@@ -1,0 +1,21 @@
+version: '3'
+services:
+  web:        # call it react-app or anything
+    environment: 
+      - CHOKIDAR_USEPOLLING=true
+    build:    # build directory include
+      context: .  # include folders
+      dockerfile: Dockerfile.dev  #specify docker file
+    ports:
+      - "3000:3000" # {localhost}{container port}
+    volumes:
+      - /app/node_modules # do not map node to any local folder
+      - .:/app            # all folders in current . map to /app in container
+  tests:    # 2nd container
+    build: 
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - /app/node_modules
+      - .:/app
+    command: ["npm", "run", "test"]
